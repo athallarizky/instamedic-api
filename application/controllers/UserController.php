@@ -1,27 +1,26 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once APPPATH . 'libraries/JWT.php';
+use \Firebase\JWT\JWT;
+
 class UserController extends CI_Controller {
 
-	public function __construct()
-	{
+	public function __construct(){
 		parent::__construct();
 		$this->load->model('User');
 	}
 
-	public function index()
-	{
+	public function index(){
 		$this->load->view('welcome_message');
 	}
 
-	public function register()
-	{
+	public function register(){
 		$saveUser = $this->User->saveUser();
 		return $this->response($saveUser);
 	}
 
-	public function response($data)
-	{
+	public function response($data){
 		$this->output
 			 ->set_content_type("application/json")
 			 ->set_status_header(200)
@@ -30,5 +29,16 @@ class UserController extends CI_Controller {
 			 ->_display();
 		
 		exit;
+	}
+
+	public function login(){
+		if(!$this->User->checkAuth()){
+			return $this->response([
+				'success' => false,
+				'message' => 'Username or Password is Incorrect.'
+			]);
+		}
+
+		die("Login success");
 	}
 }

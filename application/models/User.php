@@ -20,10 +20,29 @@ class User extends CI_Model{
 		if($check > 0) return true;	
 		else return false;
 
-	}
+    }
 
-    public function saveUser()
-    {
+    public function getUser($key,$value){
+        return $this->db->get_where('users', [$key => $value])->row();
+    }
+    
+    public function checkAuth(){
+
+        $data = [
+            'username' => $this->input->post('username'),
+            'password' => $this->input->post('password')
+        ];
+
+        $passwordHashed = $this->getUser('username', $data['username']);
+        
+        if(is_null($passwordHashed)) return false;
+
+        if(password_verify($data['password'], $passwordHashed->password)) return true;
+        else return false;
+        
+    }
+
+    public function saveUser(){
     
         /* Defined Data */
         $data = [
