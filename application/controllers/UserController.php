@@ -6,6 +6,8 @@ use \Firebase\JWT\JWT;
 
 class UserController extends CI_Controller {
 
+	private $secretKey = "YXRoYWxsYXNheWFuZ3Jpc21h";
+
 	public function __construct(){
 		parent::__construct();
 		$this->load->model('User');
@@ -32,6 +34,8 @@ class UserController extends CI_Controller {
 	}
 
 	public function login(){
+		$date = new DateTime();
+
 		if(!$this->User->checkAuth()){
 			return $this->response([
 				'success' => false,
@@ -39,6 +43,31 @@ class UserController extends CI_Controller {
 			]);
 		}
 
-		die("Login success");
+		$getUserLogged = $this->User->getUserData('username', $this->input->post('username'));
+		
+		$payload = [
+			'id'   	   => $getUserLogged->id,
+			'iat'      => $date->getTimestamp(),
+			'exp'      => $date->getTimestamp() + (3600*1)
+		];
+
+		$data['token'] = JWT::encode($payload, $this->secretKey);
+
+		$this->response($data);
+	}
+
+	public function decodeToken(){
+		
+		$header = $this->input->get_request_header('Authorization');
+
+		try{
+			$data = JWT::decode($header, $this->secretKey, ['HS256']);
+			return $data->id;
+		}catch(\Exception $err){
+			return $this->response([
+				'success' => false,
+				'message' => 'Invalid Token.'
+			]);
+		}
 	}
 }

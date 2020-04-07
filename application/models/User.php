@@ -22,10 +22,10 @@ class User extends CI_Model{
 
     }
 
-    public function getUser($key,$value){
+    public function getUserData($key,$value){
         return $this->db->get_where('users', [$key => $value])->row();
     }
-    
+
     public function checkAuth(){
 
         $data = [
@@ -33,7 +33,7 @@ class User extends CI_Model{
             'password' => $this->input->post('password')
         ];
 
-        $passwordHashed = $this->getUser('username', $data['username']);
+        $passwordHashed = $this->getUserData('username', $data['username']);
         
         if(is_null($passwordHashed)) return false;
 
