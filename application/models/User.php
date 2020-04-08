@@ -66,7 +66,6 @@ class User extends CI_Model{
         'message' => "Email Already Registered."
        ];
 
-
        /* Inserting Data */
        $insertData = $this->db->insert('users', $data);
 

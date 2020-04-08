@@ -6,31 +6,9 @@ use \Firebase\JWT\JWT;
 
 class UserController extends CI_Controller {
 
-	private $secretKey = "YXRoYWxsYXNheWFuZ3Jpc21h";
-
 	public function __construct(){
 		parent::__construct();
 		$this->load->model('User');
-	}
-
-	public function index(){
-		$this->load->view('welcome_message');
-	}
-
-	public function register(){
-		$saveUser = $this->User->saveUser();
-		return $this->response($saveUser);
-	}
-
-	public function response($data){
-		$this->output
-			 ->set_content_type("application/json")
-			 ->set_status_header(200)
-			 ->set_output(json_encode($data, 
-				 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
-			 ->_display();
-		
-		exit;
 	}
 
 	public function login(){
@@ -51,9 +29,24 @@ class UserController extends CI_Controller {
 			'exp'      => $date->getTimestamp() + (3600*1)
 		];
 
-		$data['token'] = JWT::encode($payload, $this->secretKey);
-
+		$data['token'] = JWT::encode($payload, env('SECRETKEY'));
 		$this->response($data);
+	}
+
+	public function register(){
+		$saveUser = $this->User->saveUser();
+		return $this->response($saveUser);
+	}
+
+	public function response($data){
+		$this->output
+			 ->set_content_type("application/json")
+			 ->set_status_header(200)
+			 ->set_output(json_encode($data, 
+				 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
+			 ->_display();
+		
+		exit;
 	}
 
 	public function decodeToken(){
@@ -61,7 +54,8 @@ class UserController extends CI_Controller {
 		$header = $this->input->get_request_header('Authorization');
 
 		try{
-			$data = JWT::decode($header, $this->secretKey, ['HS256']);
+			$data = JWT::decode($header, env('SECRETKEY'), ['HS256']);
+			var_dump($data);
 			return $data->id;
 		}catch(\Exception $err){
 			return $this->response([
