@@ -30,7 +30,7 @@ class UserController extends CI_Controller {
 		];
 
 		$data['token'] = JWT::encode($payload, env('SECRETKEY'));
-		$this->response($data);
+		return $this->response($data);
 	}
 
 	public function register(){
@@ -55,7 +55,7 @@ class UserController extends CI_Controller {
 
 		try{
 			$data = JWT::decode($header, env('SECRETKEY'), ['HS256']);
-			var_dump($data);
+			var_dump("Current id: " . $data->id);
 			return $data->id;
 		}catch(\Exception $err){
 			return $this->response([
@@ -63,5 +63,26 @@ class UserController extends CI_Controller {
 				'message' => 'Invalid Token.'
 			]);
 		}
+	}
+
+	public function loggedUserData(){
+		return $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+	}
+
+	public function update($id){
+
+		$checkTokenId = $this->decodeToken();
+
+		if($checkTokenId == $id) return $this->response($this->User->updateUser($id, $this->parseInput()));
+		else return $this->response([
+			'success' => false,
+			'message' => 'Invalid Token.'
+		]);
+	}
+
+	public function parseInput(){
+		// Because input data will be JSON we need to decode first.
+		// and use file_get_contents to get Method Type: Put, Delete.
+		return json_decode(file_get_contents('php://input'));
 	}
 }

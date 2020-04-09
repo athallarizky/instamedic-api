@@ -7,7 +7,9 @@ $route['api/login']['POST']    = 'UserController/login';
 $route['api/decodeToken']['GET'] = 'UserController/decodeToken';
 
 // User Module Routes //
-$route['api/update/(:any)'] = 'UserController/update/$1';
+$route['api/getLoggedUser']['GET']         = 'UserController/loggedUserData';
+$route['api/user/update/(:any)']['PUT']    = 'UserController/update/$1';
+$route['api/user/delete/(:any)']['DELETE'] = 'UserController/delete/$1';
 
 
 $route['default_controller'] = 'pagecontroller';

@@ -27,7 +27,8 @@ class User extends CI_Model{
     }
 
     public function checkAuth(){
-
+        // var_dump($this->input->post('username'));
+        // die();
         $data = [
             'username' => $this->input->post('username'),
             'password' => $this->input->post('password')
@@ -73,5 +74,31 @@ class User extends CI_Model{
             'success' => true,
             'message' => "User Successfully Registered."
        ];
+    }
+
+    public function updateUser($id, $data){
+        $data = [
+            'fullname' => $data->fullname,
+            'username' => $data->username,
+            'password' => password_hash($data->password, PASSWORD_DEFAULT),
+            // password_hash($this->input->post('password'), PASSWORD_DEFAULT)
+        ];
+
+        $this->db->where('id', $id);
+
+        try{
+			$this->db->update('users', $data);
+			return [
+                'success' => true,
+                'message' => "User Successfully Updated."
+            ];
+		}catch(\Exception $err){
+			return [
+				'success' => false,
+				'message' => 'User Update Failed : ' . $err
+			];
+		}
+
+
     }
 }
