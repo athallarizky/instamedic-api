@@ -1,14 +1,38 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once APPPATH . 'libraries/ExpiredException.php';
 require_once APPPATH . 'libraries/JWT.php';
 use \Firebase\JWT\JWT;
+use \Firebase\JWT\ExpiredException;
 
 class UserController extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
 		$this->load->model('User');
+	}
+
+	//This method should be used as a helper
+	private function decodeToken(){
+		
+		$header = $this->input->get_request_header('Authorization');
+
+		try{
+			$data = JWT::decode($header, env('SECRETKEY'), ['HS256']);
+			var_dump("Current id: " . $data->id);
+			return $data->id;
+		}catch (ExpiredException $err){
+			return $this->response([
+				'success' => false,
+				'message' => 'Error Token : Expired Token.'
+			]);
+		}catch(Exception $err){
+			return $this->response([
+				'success' => false,
+				'message' => 'Error Token : Invalid Token.'
+			]);
+		}
 	}
 
 	public function response($data){
@@ -47,22 +71,6 @@ class UserController extends CI_Controller {
 	public function register(){
 		$saveUser = $this->User->saveUser();
 		return $this->response($saveUser);
-	}
-
-	public function decodeToken(){
-		
-		$header = $this->input->get_request_header('Authorization');
-
-		try{
-			$data = JWT::decode($header, env('SECRETKEY'), ['HS256']);
-			var_dump("Current id: " . $data->id);
-			return $data->id;
-		}catch(\Exception $err){
-			return $this->response([
-				'success' => false,
-				'message' => 'Invalid Token.'
-			]);
-		}
 	}
 
 	public function loggedUserData(){

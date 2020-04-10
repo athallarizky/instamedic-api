@@ -7,14 +7,16 @@ $route['api/login']['POST']      = 'UserController/login';
 $route['api/decodeToken']['GET'] = 'UserController/decodeToken';
 
 // User Module Routes //
-$route['api/getLoggedUser']['GET']         = 'UserController/loggedUserData';
+$route['api/user/getLoggedUser']['GET']    = 'UserController/loggedUserData';
 $route['api/user/update/(:any)']['PUT']    = 'UserController/update/$1';
 $route['api/user/delete/(:any)']['DELETE'] = 'UserController/delete/$1'; //not yet
 
 // Medicine Module Routes //
-$route['api/getAllMedicines']['GET']       = 'MedicineController/getAll';
-$route['api/createMedicine']['POST']       = 'MedicineController/create';
-
+$route['api/medicine/getAll']['GET']             = 'MedicineController/getAll';
+$route['api/medicine/getMedicine/(:any)']['GET'] = 'MedicineController/getMedicine/$1';
+$route['api/medicine/create']['POST']            = 'MedicineController/create';
+$route['api/medicine/update/(:any)']['PUT']      = 'MedicineController/update/$1';
+$route['api/medicine/delete/(:any)']['DELETE']   = 'MedicineController/delete/$1';
 
 $route['default_controller'] = 'pagecontroller';
 $route['404_override'] = '';
