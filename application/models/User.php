@@ -80,7 +80,6 @@ class User extends CI_Model{
             'fullname' => $data->fullname,
             'username' => $data->username,
             'password' => password_hash($data->password, PASSWORD_DEFAULT),
-            // password_hash($this->input->post('password'), PASSWORD_DEFAULT)
         ];
 
         try{
@@ -95,7 +94,9 @@ class User extends CI_Model{
 				'message' => 'User Update Failed : ' . $err
 			];
 		}
+    }
 
-
+    public function isAllowed($getUserLogged){
+        return $getUserLogged->role != 'user' ? true : false;
     }
 }

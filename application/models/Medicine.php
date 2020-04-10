@@ -1,11 +1,6 @@
 <?php
 
 class Medicine extends CI_Model{
-    
-    private function checkUser($getUserLogged){
-        if( $getUserLogged->role == 'user') return false;
-        else return true;
-    }
 
     public function getAllMedicines(){
         return $this->db->get('Medicines')->result();
@@ -18,14 +13,6 @@ class Medicine extends CI_Model{
     }
 
     public function saveMedicine($getUserLogged){
-
-        // Check user role before inserting.
-        $checkUser = $this->checkUser($getUserLogged);
-
-        if(!$checkUser) return [
-            'success' => false,
-            'message' => "403 : You Don't Have Permission."
-        ];
         
         /* Defined Data */
         $data = [
@@ -45,14 +32,6 @@ class Medicine extends CI_Model{
     }
 
     public function updateMedicine($id, $getUserLogged, $data){
-
-        // Check user role before inserting.
-        $checkUser = $this->checkUser($getUserLogged);
-
-        if(!$checkUser) return [
-            'success' => false,
-            'message' => "403 : You Don't Have Permission."
-        ];
 
         /* Defined Data */
         $data = [
@@ -76,13 +55,6 @@ class Medicine extends CI_Model{
     }
 
     public function deleteMedicine($id, $getUserLogged){
-        // Check user role before inserting.
-        $checkUser = $this->checkUser($getUserLogged);
-
-        if(!$checkUser) return [
-            'success' => false,
-            'message' => "403 : You Don't Have Permission."
-        ];
 
         try {
             $this->db->where('id', $id)->delete('medicines');

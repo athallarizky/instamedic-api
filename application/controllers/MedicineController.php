@@ -55,8 +55,15 @@ class MedicineController extends CI_Controller{
     }
 
     public function create(){
-        // Get who insert the data
+        // Get who update the data
         $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+
+        // Check permission
+        $checkPermission = $this->User->isAllowed($getUserLogged);
+        if(!$checkPermission) return $this->response([
+            'success' => false,
+            'message' => '403 : Not Allowed.'
+        ]);
 
         $saveMedicine = $this->Medicine->saveMedicine($getUserLogged);
 		return $this->response($saveMedicine);
@@ -66,6 +73,13 @@ class MedicineController extends CI_Controller{
         // Get who update the data
         $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
 
+        // Check permission
+        $checkPermission = $this->User->isAllowed($getUserLogged);
+        if(!$checkPermission) return $this->response([
+            'success' => false,
+            'message' => '403 : Not Allowed.'
+        ]);
+
         $updateMedicine = $this->Medicine->updateMedicine($id, $getUserLogged, $this->parseInput());        
         return $this->response($updateMedicine);
     }
@@ -73,6 +87,13 @@ class MedicineController extends CI_Controller{
     public function delete($id){
         // Get who update the data
         $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+
+        // Check permission
+        $checkPermission = $this->User->isAllowed($getUserLogged);
+        if(!$checkPermission) return $this->response([
+            'success' => false,
+            'message' => '403 : Not Allowed.'
+        ]);
 
         $deleteMedicine = $this->Medicine->deleteMedicine($id, $getUserLogged);
         return $this->response($deleteMedicine);
