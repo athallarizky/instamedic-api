@@ -15,7 +15,7 @@ class ConsultationController extends CI_Controller{
 
     public function get($username){
         
-        // Get who update the data
+        // Get who get the data
         $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
         // die($getUserLogged);
         if($getUserLogged->username != $username) return $this->response([
@@ -28,7 +28,7 @@ class ConsultationController extends CI_Controller{
 
     public function create($doctorUsername){
 
-        // Get who update the data
+        // Get who create the data
         $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
 
         // Check permission
@@ -40,6 +40,14 @@ class ConsultationController extends CI_Controller{
 
         $saveConsult = $this->Consultation->saveConsult($getUserLogged, $doctorUsername);
 		return $this->response($saveConsult);
+    }
+
+    public function delete($id){
+        // Get who delete the data
+        $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+        
+        $deleteConsult = $this->Consultation->deleteConsult($id, $getUserLogged->username);
+        return $this->response($deleteConsult);
     }
 
 

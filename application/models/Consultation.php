@@ -24,4 +24,25 @@ class Consultation extends CI_Model{
             'message' => "Consultation Data Successfully Added."
         ];
     }
+
+    public function deleteConsult($id, $username){
+        $consult = $this->db->get_where('Consultations', ['id' => $id])->row();
+
+        if(!isset($consult->createdBy)) return [
+            'success' => false,
+            'message' => "Consultation Data Not Found. "
+        ];
+
+        if($consult->createdBy != $username) return [
+            'success' => false,
+            'message' => "Consultation Data Delete Failed. "
+        ];
+
+        $deleteConsult = $this->db->where('id', $id)->delete('consultations');
+
+        if($deleteConsult) return [
+            'success' => true,
+            'message' => "Consultation Data Successfully Deleted."
+        ];
+    }
 }
