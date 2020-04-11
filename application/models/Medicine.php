@@ -31,7 +31,7 @@ class Medicine extends CI_Model{
         
     }
 
-    public function updateMedicine($id, $getUserLogged, $data){
+    public function updateMedicine($id, $data){
 
         /* Defined Data */
         $data = [
@@ -54,7 +54,7 @@ class Medicine extends CI_Model{
 		}
     }
 
-    public function deleteMedicine($id, $getUserLogged){
+    public function deleteMedicine($id){
 
         try {
             $this->db->where('id', $id)->delete('medicines');

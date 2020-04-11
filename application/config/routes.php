@@ -13,10 +13,15 @@ $route['api/user/delete/(:any)']['DELETE'] = 'UserController/delete/$1'; //not y
 
 // Medicine Module Routes //
 $route['api/medicine/getAll']['GET']             = 'MedicineController/getAll';
-$route['api/medicine/getMedicine/(:any)']['GET'] = 'MedicineController/getMedicine/$1';
+$route['api/medicine/get/(:any)']['GET']         = 'MedicineController/get/$1';
 $route['api/medicine/create']['POST']            = 'MedicineController/create';
 $route['api/medicine/update/(:any)']['PUT']      = 'MedicineController/update/$1';
 $route['api/medicine/delete/(:any)']['DELETE']   = 'MedicineController/delete/$1';
+
+// Consultation Module Routes //
+$route['api/consultation/get/(:any)']['GET']      = 'ConsultationController/get/$1';
+$route['api/consultation/create/(:any)']['POST']  = 'ConsultationController/create/$1';
+
 
 $route['default_controller'] = 'pagecontroller';
 $route['404_override'] = '';

@@ -6,65 +6,43 @@ require_once APPPATH . 'libraries/JWT.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
 
-class MedicineController extends CI_Controller{
+class ConsultationController extends CI_Controller{
     public function __construct(){
 		parent::__construct();
-        $this->load->model('Medicine');
+        $this->load->model('Consultation');
         $this->load->model('User');
     }
-    
-    public function getAll(){
-        return $this->response($this->Medicine->getMedicineData());
+
+    public function get($username){
+        
+        // Get who update the data
+        $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+        // die($getUserLogged);
+        if($getUserLogged->username != $username) return $this->response([
+            'success' => false,
+            'message' => '403 : Not Allowed.'
+        ]);
+
+        return $this->response($this->Consultation->getConsultList($username));
     }
 
-    public function get($id){
-        return $this->response($this->Medicine->getMedicineData('id', $id));
-    }
+    public function create($doctorUsername){
 
-    public function create(){
         // Get who update the data
         $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
 
         // Check permission
         $checkPermission = $this->User->isAllowed($getUserLogged);
-        if(!$checkPermission) return $this->response([
+        if($checkPermission) return $this->response([
             'success' => false,
             'message' => '403 : Not Allowed.'
         ]);
 
-        $saveMedicine = $this->Medicine->saveMedicine($getUserLogged);
-		return $this->response($saveMedicine);
+        $saveConsult = $this->Consultation->saveConsult($getUserLogged, $doctorUsername);
+		return $this->response($saveConsult);
     }
 
-    public function update($id){
-        // Get who update the data
-        $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
 
-        // Check permission
-        $checkPermission = $this->User->isAllowed($getUserLogged);
-        if(!$checkPermission) return $this->response([
-            'success' => false,
-            'message' => '403 : Not Allowed.'
-        ]);
-
-        $updateMedicine = $this->Medicine->updateMedicine($id, $this->parseInput());        
-        return $this->response($updateMedicine);
-    }
-
-    public function delete($id){
-        // Get who update the data
-        $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
-
-        // Check permission
-        $checkPermission = $this->User->isAllowed($getUserLogged);
-        if(!$checkPermission) return $this->response([
-            'success' => false,
-            'message' => '403 : Not Allowed.'
-        ]);
-
-        $deleteMedicine = $this->Medicine->deleteMedicine($id);
-        return $this->response($deleteMedicine);
-    }
 
     /* Method Below This Comment Should be Used as Helper. This isnt' best practice. */
     public function response($data){
@@ -99,11 +77,6 @@ class MedicineController extends CI_Controller{
 		}
 	}
 
-    public function parseInput(){
-		// Because input data will be JSON we need to decode first.
-		// and use file_get_contents to get Method Type: Put, Delete.
-		return json_decode(file_get_contents('php://input'));
-	}
 
 
 }
