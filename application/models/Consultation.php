@@ -7,6 +7,10 @@ class Consultation extends CI_Model{
         return $this->db->get_where('Consultations', ["createdBy" => $username])->result();
     }
 
+    public function getCounsult($id){
+        return $this->db->get_where('Consultations', ["id" => $id])->row();
+    }
+
     public function saveConsult($getUserLogged, $doctorUsername){
 
         /* Defined Data */

@@ -23,6 +23,10 @@ $route['api/consultation/get/(:any)']['GET']       = 'ConsultationController/get
 $route['api/consultation/create/(:any)']['POST']   = 'ConsultationController/create/$1';
 $route['api/consultation/delete/(:any)']['DELETE'] = 'ConsultationController/delete/$1';
 
+// Consultation: messages Module Routes //
+$route['api/consultation/message/get/(:any)']['GET']      = 'MessageController/get/$1';
+$route['api/consultation/message/create/(:any)']['POST']  = 'MessageController/create/$1';
+
 
 $route['default_controller'] = 'pagecontroller';
 $route['404_override'] = '';

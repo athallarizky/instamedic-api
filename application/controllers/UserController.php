@@ -13,39 +13,6 @@ class UserController extends CI_Controller {
 		$this->load->model('User');
 	}
 
-	//This method should be used as a helper
-	private function decodeToken(){
-		
-		$header = $this->input->get_request_header('Authorization');
-
-		try{
-			$data = JWT::decode($header, env('SECRETKEY'), ['HS256']);
-			var_dump("Current id: " . $data->id);
-			return $data->id;
-		}catch (ExpiredException $err){
-			return $this->response([
-				'success' => false,
-				'message' => 'Error Token : Expired Token.'
-			]);
-		}catch(Exception $err){
-			return $this->response([
-				'success' => false,
-				'message' => 'Error Token : Invalid Token.'
-			]);
-		}
-	}
-
-	public function response($data){
-		$this->output
-			 ->set_content_type("application/json")
-			 ->set_status_header(200)
-			 ->set_output(json_encode($data, 
-				 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
-			 ->_display();
-		
-		exit;
-	}
-
 	public function login(){
 		$date = new DateTime();
 
@@ -86,6 +53,38 @@ class UserController extends CI_Controller {
 			'success' => false,
 			'message' => 'Invalid Token.'
 		]);
+	}
+
+	/* Method Below This Comment Should be Used as Helper. This isnt' best practice. */
+    public function response($data){
+		$this->output
+			 ->set_content_type("application/json")
+			 ->set_status_header(200)
+			 ->set_output(json_encode($data, 
+				 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES))
+			 ->_display();
+		
+		exit;
+    }
+    
+    private function decodeToken(){
+		
+		$header = $this->input->get_request_header('Authorization');
+
+		try{
+			$data = JWT::decode($header, env('SECRETKEY'), ['HS256']);
+			return $data->id;
+		}catch (ExpiredException $err){
+			return $this->response([
+				'success' => false,
+				'message' => 'Error Token : Expired Token.'
+			]);
+		}catch(Exception $err){
+			return $this->response([
+				'success' => false,
+				'message' => 'Error Token : Invalid Token.'
+			]);
+		}
 	}
 
 	public function parseInput(){

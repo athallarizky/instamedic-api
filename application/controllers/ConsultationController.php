@@ -70,7 +70,6 @@ class ConsultationController extends CI_Controller{
 
 		try{
 			$data = JWT::decode($header, env('SECRETKEY'), ['HS256']);
-			var_dump("Current id: " . $data->id);
 			return $data->id;
 		}catch (ExpiredException $err){
 			return $this->response([
