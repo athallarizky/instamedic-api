@@ -2,6 +2,14 @@
 
 class Medicine extends CI_Model{
 
+    public function searchMedicine(){
+        $key = $this->input->post('searchKey');
+        $this->db->like('name', $key);
+        $this->db->or_like('description', $key);
+        $this->db->or_like('category', $key);
+        return $this->db->get('Medicines')->result();
+    }
+
     public function getAllMedicines(){
         return $this->db->get('Medicines')->result();
     }

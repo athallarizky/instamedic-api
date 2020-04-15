@@ -11,6 +11,11 @@ class MedicineController extends CI_Controller{
 		parent::__construct();
         $this->load->model('Medicine');
         $this->load->model('User');
+
+        // Cors
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
     }
     
     public function getAll(){
@@ -64,6 +69,10 @@ class MedicineController extends CI_Controller{
 
         $deleteMedicine = $this->Medicine->deleteMedicine($id);
         return $this->response($deleteMedicine);
+    }
+
+    public function search(){
+        return $this->response($this->Medicine->searchMedicine());
     }
 
     /* Method Below This Comment Should be Used as Helper. This isnt' best practice. */
