@@ -11,6 +11,11 @@ class ConsultationController extends CI_Controller{
 		parent::__construct();
         $this->load->model('Consultation');
         $this->load->model('User');
+
+        // Cors
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
     }
 
     public function get($username){

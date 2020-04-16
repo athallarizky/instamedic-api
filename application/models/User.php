@@ -42,16 +42,20 @@ class User extends CI_Model{
         
     }
 
-    public function saveUser(){
+    public function saveUser($data){
+
+        // die($data->fullname);
+        // return($_POST['data']);
+        // die();
     
         /* Defined Data */
         $data = [
-            'fullname'     => $this->input->post('fullname'),
-            'username'     => $this->input->post('username'),
-            'email'        => $this->input->post('email'),
-            'password'     => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+            'fullname'     => $data->fullname,
+            'username'     => $data->username,
+            'email'        => $data->email,
+            'password'     => password_hash($data->password, PASSWORD_DEFAULT),
         ];
-
+        
         /* Username Check */
        $checkUsername = $this->checkUsername($data['username']);
        if($checkUsername) return [

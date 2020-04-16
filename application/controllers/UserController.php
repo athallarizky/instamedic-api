@@ -11,6 +11,11 @@ class UserController extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->model('User');
+
+		// Cors
+		header('Access-Control-Allow-Origin: *');
+		header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+		header("Access-Control-Allow-Headers: Content-Type");
 	}
 
 	public function login(){
@@ -36,7 +41,7 @@ class UserController extends CI_Controller {
 	}
 
 	public function register(){
-		$saveUser = $this->User->saveUser();
+		$saveUser = $this->User->saveUser($this->parseInput());
 		return $this->response($saveUser);
 	}
 
