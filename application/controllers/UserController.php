@@ -13,22 +13,28 @@ class UserController extends CI_Controller {
 		$this->load->model('User');
 
 		// Cors
+		// header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        // header("Access-Control-Allow-Origin: *");
+        // header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+		// header("Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding, Authorization");
+		
 		header('Access-Control-Allow-Origin: *');
-		header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-		header("Access-Control-Allow-Headers: Content-Type");
+        header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 	}
 
 	public function login(){
+		
 		$date = new DateTime();
 
-		if(!$this->User->checkAuth()){
+		if(!$this->User->checkAuth($this->parseInput())){
 			return $this->response([
 				'success' => false,
 				'message' => 'Username or Password is Incorrect.'
 			]);
 		}
 
-		$getUserLogged = $this->User->getUserData('username', $this->input->post('username'));
+		$getUserLogged = $this->User->getUserData('username', $this->parseInput()->username);
 		
 		$payload = [
 			'id'   	   => $getUserLogged->id,
@@ -36,7 +42,12 @@ class UserController extends CI_Controller {
 			'exp'      => $date->getTimestamp() + (3600*1)
 		];
 
-		$data['token'] = JWT::encode($payload, env('SECRETKEY'));
+		$data = [
+			'success' => true,
+			'message' => 'Sucessfully Logged In.',
+			'token' => JWT::encode($payload, env('SECRETKEY')),
+		];
+
 		return $this->response($data);
 	}
 
@@ -46,7 +57,8 @@ class UserController extends CI_Controller {
 	}
 
 	public function loggedUserData(){
-		return $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+		$getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+		return $this->response($getUserLogged);
 	}
 
 	public function update($id){
@@ -73,7 +85,7 @@ class UserController extends CI_Controller {
     }
     
     private function decodeToken(){
-		
+
 		$header = $this->input->get_request_header('Authorization');
 
 		try{

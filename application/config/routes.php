@@ -7,9 +7,10 @@ $route['api/login']['POST']      = 'UserController/login';
 $route['api/decodeToken']['GET'] = 'UserController/decodeToken';
 
 // User Module Routes //
-$route['api/user/getLoggedUser']['GET']    = 'UserController/loggedUserData';
-$route['api/user/update/(:any)']['PUT']    = 'UserController/update/$1';
-$route['api/user/delete/(:any)']['DELETE'] = 'UserController/delete/$1'; //not yet
+$route['api/user/getLoggedUser']['OPTIONS'] = 'UserController/loggedUserData';
+$route['api/user/getLoggedUser']['GET']     = 'UserController/loggedUserData';
+$route['api/user/update/(:any)']['PUT']     = 'UserController/update/$1';
+$route['api/user/delete/(:any)']['DELETE']  = 'UserController/delete/$1'; //not yet
 
 // Medicine Module Routes //
 $route['api/medicine/getAll']['GET']             = 'MedicineController/getAll';

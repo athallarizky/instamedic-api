@@ -26,11 +26,11 @@ class User extends CI_Model{
         return $this->db->get_where('users', [$key => $value])->row();
     }
 
-    public function checkAuth(){
+    public function checkAuth($data){
 
         $data = [
-            'username' => $this->input->post('username'),
-            'password' => $this->input->post('password')
+            'username' => $data->username,
+            'password' => $data->password
         ];
 
         $passwordHashed = $this->getUserData('username', $data['username']);
@@ -43,10 +43,6 @@ class User extends CI_Model{
     }
 
     public function saveUser($data){
-
-        // die($data->fullname);
-        // return($_POST['data']);
-        // die();
     
         /* Defined Data */
         $data = [
