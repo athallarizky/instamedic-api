@@ -79,7 +79,7 @@ class User extends CI_Model{
         $data = [
             'fullname' => $data->fullname,
             'username' => $data->username,
-            'password' => password_hash($data->password, PASSWORD_DEFAULT),
+            // 'password' => password_hash($data->password, PASSWORD_DEFAULT),
         ];
 
         try{

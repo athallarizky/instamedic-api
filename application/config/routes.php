@@ -9,6 +9,7 @@ $route['api/decodeToken']['GET'] = 'UserController/decodeToken';
 // User Module Routes //
 $route['api/user/getLoggedUser']['OPTIONS'] = 'UserController/loggedUserData';
 $route['api/user/getLoggedUser']['GET']     = 'UserController/loggedUserData';
+$route['api/user/update/(:any)']['OPTIONS']     = 'UserController/update/$1';
 $route['api/user/update/(:any)']['PUT']     = 'UserController/update/$1';
 $route['api/user/delete/(:any)']['DELETE']  = 'UserController/delete/$1'; //not yet
 
