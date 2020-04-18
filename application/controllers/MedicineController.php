@@ -13,9 +13,9 @@ class MedicineController extends CI_Controller{
         $this->load->model('User');
 
         // Cors
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
+		header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
     }
     
     public function getAll(){
@@ -36,8 +36,8 @@ class MedicineController extends CI_Controller{
             'success' => false,
             'message' => '403 : Not Allowed.'
         ]);
-
-        $saveMedicine = $this->Medicine->saveMedicine($getUserLogged);
+ 
+        $saveMedicine = $this->Medicine->saveMedicine($getUserLogged, $this->parseInput());
 		return $this->response($saveMedicine);
     }
 

@@ -20,13 +20,13 @@ class Medicine extends CI_Model{
         } else return $this->db->get('Medicines')->result();
     }
 
-    public function saveMedicine($getUserLogged){
+    public function saveMedicine($getUserLogged, $data){
         
         /* Defined Data */
         $data = [
-            'name'         => $this->input->post('name'),
-            'description'  => $this->input->post('description'),
-            'category'     => $this->input->post('category'),
+            'name'         => $data->name,
+            'description'  => $data->description,
+            'category'     => $data->category,
             'addedBy'      => $getUserLogged->username,
         ];
 
@@ -52,12 +52,12 @@ class Medicine extends CI_Model{
 			$this->db->where('id', $id)->update('medicines', $data);
 			return [
                 'success' => true,
-                'message' => "User Successfully Updated."
+                'message' => "Medicine Successfully Updated."
             ];
 		}catch(Exception $err){
 			return [
 				'success' => false,
-				'message' => 'User Update Failed : ' . $err
+				'message' => 'Medicine Update Failed : ' . $err
 			];
 		}
     }
