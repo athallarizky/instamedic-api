@@ -1,10 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once APPPATH . 'libraries/SignatureInvalidException.php';
 require_once APPPATH . 'libraries/ExpiredException.php';
 require_once APPPATH . 'libraries/JWT.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
+use \Firebase\JWT\SignatureInvalidException;
 
 class ConsultationController extends CI_Controller{
     public function __construct(){
@@ -13,9 +15,9 @@ class ConsultationController extends CI_Controller{
         $this->load->model('User');
 
         // Cors
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
+		header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
     }
 
     public function get($username){
@@ -43,7 +45,7 @@ class ConsultationController extends CI_Controller{
             'message' => '403 : Not Allowed.'
         ]);
 
-        $saveConsult = $this->Consultation->saveConsult($getUserLogged, $doctorUsername);
+        $saveConsult = $this->Consultation->saveConsult($getUserLogged, $doctorUsername, $this->parseInput());
 		return $this->response($saveConsult);
     }
 
@@ -87,6 +89,12 @@ class ConsultationController extends CI_Controller{
 				'message' => 'Error Token : Invalid Token.'
 			]);
 		}
+    }
+    
+    public function parseInput(){
+		// Because input data will be JSON we need to decode first.
+		// and use file_get_contents to get Method Type: Put, Delete.
+		return json_decode(file_get_contents('php://input'));
 	}
 
 

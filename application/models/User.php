@@ -96,9 +96,9 @@ class User extends CI_Model{
 		}
     }
 
-    public function getDoctorData($id = null){
-        if($id != null){
-            return $this->db->get_where('users', ['id' => $id, 'role' => 'doctor'])->row();
+    public function getDoctorData($username = null){
+        if($username != null){
+            return $this->db->get_where('users', ['username' => $username, 'role' => 'doctor'])->row();
         } else return $this->db->get_where('users', ['role' => 'doctor'])->result();
 
     }

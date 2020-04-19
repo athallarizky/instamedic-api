@@ -3,20 +3,23 @@
 
 class Consultation extends CI_Model{
 
-    public function getConsultList($username){
-        return $this->db->get_where('Consultations', ["createdBy" => $username])->result();
+    public function getConsultList($username){   
+        return $this->db->where('createdBy', $username)
+                        ->or_where('consultTo', $username)
+                        ->get('Consultations')
+                        ->result();
     }
 
     public function getCounsult($id){
         return $this->db->get_where('Consultations', ["id" => $id])->row();
     }
 
-    public function saveConsult($getUserLogged, $doctorUsername){
+    public function saveConsult($getUserLogged, $doctorUsername, $data){
 
         /* Defined Data */
         $data = [
-            'subject'     => $this->input->post('subject'),
-            'description' => $this->input->post('description'),
+            'subject'     => $data->subject,
+            'description' => $data->description,
             'createdBy'   => $getUserLogged->username,
             'consultTo'   => $doctorUsername,
         ];
@@ -37,7 +40,7 @@ class Consultation extends CI_Model{
             'message' => "Consultation Data Not Found. "
         ];
 
-        if($consult->createdBy != $username) return [
+        if($consult->createdBy != $username && $consult->consultTo != $username) return [
             'success' => false,
             'message' => "Consultation Data Delete Failed. "
         ];

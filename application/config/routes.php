@@ -41,8 +41,13 @@ $route['api/medicine/delete/(:any)']['DELETE']   = 'MedicineController/delete/$1
 $route['api/medicine/search']['POST']            = 'MedicineController/search';
 
 // Consultation Module Routes //
+$route['api/consultation/get/(:any)']['OPTIONS']       = 'ConsultationController/get/$1';
 $route['api/consultation/get/(:any)']['GET']       = 'ConsultationController/get/$1';
+
+$route['api/consultation/create/(:any)']['OPTIONS']   = 'ConsultationController/create/$1';
 $route['api/consultation/create/(:any)']['POST']   = 'ConsultationController/create/$1';
+
+$route['api/consultation/delete/(:any)']['OPTIONS'] = 'ConsultationController/delete/$1';
 $route['api/consultation/delete/(:any)']['DELETE'] = 'ConsultationController/delete/$1';
 
 // Consultation: messages Module Routes //
