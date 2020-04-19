@@ -10,26 +10,32 @@ $route['api/decodeToken']['GET'] = 'UserController/decodeToken';
 $route['api/user/getLoggedUser']['OPTIONS'] = 'UserController/loggedUserData';
 $route['api/user/getLoggedUser']['GET']     = 'UserController/loggedUserData';
 
-$route['api/user/update/(:any)']['OPTIONS']     = 'UserController/update/$1';
+$route['api/user/update/(:any)']['OPTIONS'] = 'UserController/update/$1';
 $route['api/user/update/(:any)']['PUT']     = 'UserController/update/$1';
 
-$route['api/user/getAllDoctor']['GET']     = 'UserController/getAllDoctor';
-$route['api/user/getDoctor/(:any)']['GET'] = 'UserController/getDoctor/$1';
-$route['api/user/createDoctor']['POST']    = 'UserController/createDoctor';
+$route['api/user/getAllDoctor']['OPTIONS']  = 'UserController/getAllDoctor';
+$route['api/user/getAllDoctor']['GET']      = 'UserController/getAllDoctor';
 
-$route['api/user/delete/(:any)']['DELETE']  = 'UserController/delete/$1'; //not yet
+$route['api/user/getDoctor/(:any)']['OPTIONS']  = 'UserController/getDoctor/$1';
+$route['api/user/getDoctor/(:any)']['GET']  = 'UserController/getDoctor/$1';
+
+$route['api/user/createDoctor']['OPTIONS']  = 'UserController/createDoctor';
+$route['api/user/createDoctor']['POST']     = 'UserController/createDoctor';
+
+$route['api/user/deleteDoctor/(:any)']['OPTIONS']  = 'UserController/deleteDoctor/$1';
+$route['api/user/deleteDoctor/(:any)']['DELETE']  = 'UserController/deleteDoctor/$1';
 
 // Medicine Module Routes //
 $route['api/medicine/getAll']['GET']             = 'MedicineController/getAll';
 $route['api/medicine/get/(:any)']['GET']         = 'MedicineController/get/$1';
 
-$route['api/medicine/create']['OPTIONS']            = 'MedicineController/create';
+$route['api/medicine/create']['OPTIONS']         = 'MedicineController/create';
 $route['api/medicine/create']['POST']            = 'MedicineController/create';
 
-$route['api/medicine/update/(:any)']['OPTIONS=']      = 'MedicineController/update/$1';
+$route['api/medicine/update/(:any)']['OPTIONS']  = 'MedicineController/update/$1';
 $route['api/medicine/update/(:any)']['PUT']      = 'MedicineController/update/$1';
 
-$route['api/medicine/delete/(:any)']['OPTIONS']   = 'MedicineController/delete/$1';
+$route['api/medicine/delete/(:any)']['OPTIONS']  = 'MedicineController/delete/$1';
 $route['api/medicine/delete/(:any)']['DELETE']   = 'MedicineController/delete/$1';
 
 $route['api/medicine/search']['POST']            = 'MedicineController/search';

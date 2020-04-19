@@ -103,6 +103,56 @@ class User extends CI_Model{
 
     }
 
+    // Note: This isn't best practice, Maybe someday this method can be reafctored using saveUser() above
+    public function saveDoctor($data){
+        /* Defined Data */
+        $data = [
+            'fullname'    => $data->fullname,
+            'username'    => $data->username,
+            'email'       => $data->email,
+            'specialist'  => $data->specialist,
+            'role'        => 'doctor',
+            'password'    => password_hash($data->password, PASSWORD_DEFAULT),
+        ];
+
+        /* Username Check */
+       $checkUsername = $this->checkUsername($data['username']);
+       if($checkUsername) return [
+            'success' => false,
+            'message' => "Username Already Registered."
+        ];
+
+       /* Email Check */
+       $checkEmail = $this->checkEmail($data['email']);
+       if($checkEmail) return [
+        'success' => false,
+        'message' => "Email Already Registered."
+       ];
+
+       /* Inserting Data */
+       $insertData = $this->db->insert('users', $data);
+
+       if($insertData) return [
+            'success' => true,
+            'message' => "Doctor Successfully Registered."
+       ];
+    }
+
+    public function deleteDoctor($id){
+        try {
+            $this->db->where('id', $id)->delete('users');
+            return [
+                'success' => true,
+                'message' => 'Doctor Sucessfully Deleted.'
+            ];
+        } catch (Exception $err) {
+            return [
+				'success' => false,
+				'message' => 'Doctor Delete Failed : ' . $err
+			];
+        }
+    }
+
     public function isAllowed($getUserLogged){
         return $getUserLogged->role != 'user' ? true : false;
     }

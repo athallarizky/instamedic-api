@@ -59,7 +59,6 @@ class UserController extends CI_Controller {
 	}
 
 	public function update($id){
-
 		$checkTokenId = $this->decodeToken();
 
 		if($checkTokenId == $id) return $this->response($this->User->updateUser($id, $this->parseInput()));
@@ -87,6 +86,34 @@ class UserController extends CI_Controller {
 			'success' => false,
 			'message' => 'Invalid Token.'
 		]);
+	}
+
+	public function createDoctor(){
+		$getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+
+		// Check permission
+        $checkPermission = $this->User->isAdmin($getUserLogged);
+        if(!$checkPermission) return $this->response([
+            'success' => false,
+            'message' => '403 : Not Allowed.'
+        ]);
+
+		$saveDoctor = $this->User->saveDoctor($this->parseInput());
+		return $this->response($saveDoctor);
+	}
+
+	public function deleteDoctor($id){
+		$getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+
+		// Check permission
+        $checkPermission = $this->User->isAdmin($getUserLogged);
+        if(!$checkPermission) return $this->response([
+            'success' => false,
+            'message' => '403 : Not Allowed.'
+		]);
+		
+		$deleteDoctor = $this->User->deleteDoctor($id);
+        return $this->response($deleteDoctor);
 	}
 
 	/* Method Below This Comment Should be Used as Helper. This isnt' best practice. */
