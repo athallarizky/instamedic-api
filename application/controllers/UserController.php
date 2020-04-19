@@ -1,10 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once APPPATH . 'libraries/SignatureInvalidException.php';
 require_once APPPATH . 'libraries/ExpiredException.php';
 require_once APPPATH . 'libraries/JWT.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
+use \Firebase\JWT\SignatureInvalidException;
 
 class UserController extends CI_Controller {
 
@@ -61,6 +63,26 @@ class UserController extends CI_Controller {
 		$checkTokenId = $this->decodeToken();
 
 		if($checkTokenId == $id) return $this->response($this->User->updateUser($id, $this->parseInput()));
+		else return $this->response([
+			'success' => false,
+			'message' => 'Invalid Token.'
+		]);
+	}
+
+	public function getAllDoctor(){
+		$checkAuth = $this->decodeToken();
+
+		if($checkAuth) return $this->response($this->User->getDoctorData());
+		else return $this->response([
+			'success' => false,
+			'message' => 'Invalid Token.'
+		]);
+	}
+
+	public function getDoctor($id){
+		$checkAuth = $this->decodeToken();
+
+		if($checkAuth) return $this->response($this->User->getDoctorData($id));
 		else return $this->response([
 			'success' => false,
 			'message' => 'Invalid Token.'

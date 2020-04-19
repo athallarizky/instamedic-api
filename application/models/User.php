@@ -96,7 +96,18 @@ class User extends CI_Model{
 		}
     }
 
+    public function getDoctorData($id = null){
+        if($id != null){
+            return $this->db->get_where('users', ['id' => $id, 'role' => 'doctor'])->row();
+        } else return $this->db->get_where('users', ['role' => 'doctor'])->result();
+
+    }
+
     public function isAllowed($getUserLogged){
         return $getUserLogged->role != 'user' ? true : false;
+    }
+
+    public function isAdmin($getUserLogged){
+        return $getUserLogged->role == 'admin' ? true : false;
     }
 }

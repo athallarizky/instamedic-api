@@ -1,10 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+require_once APPPATH . 'libraries/SignatureInvalidException.php';
 require_once APPPATH . 'libraries/ExpiredException.php';
 require_once APPPATH . 'libraries/JWT.php';
 use \Firebase\JWT\JWT;
 use \Firebase\JWT\ExpiredException;
+use \Firebase\JWT\SignatureInvalidException;
 
 class MedicineController extends CI_Controller{
     public function __construct(){
