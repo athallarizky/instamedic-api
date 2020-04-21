@@ -78,10 +78,20 @@ class UserController extends CI_Controller {
 		]);
 	}
 
-	public function getDoctor($username){
+	public function getDoctorById($id){
 		$checkAuth = $this->decodeToken();
 
-		if($checkAuth) return $this->response($this->User->getDoctorData($username));
+		if($checkAuth) return $this->response($this->User->getDoctorData($id));
+		else return $this->response([
+			'success' => false,
+			'message' => 'Invalid Token.'
+		]);
+	}
+
+	public function getDoctorByUsername($username){
+		$checkAuth = $this->decodeToken();
+
+		if($checkAuth) return $this->response($this->User->getDoctorByUsername($username));
 		else return $this->response([
 			'success' => false,
 			'message' => 'Invalid Token.'

@@ -3,9 +3,9 @@
 
 class Consultation extends CI_Model{
 
-    public function getConsultList($username){   
-        return $this->db->where('createdBy', $username)
-                        ->or_where('consultTo', $username)
+    public function getConsultList($id){   
+        return $this->db->where('createdBy', $id)
+                        ->or_where('consultTo', $id)
                         ->get('Consultations')
                         ->result();
     }
@@ -14,14 +14,14 @@ class Consultation extends CI_Model{
         return $this->db->get_where('Consultations', ["id" => $id])->row();
     }
 
-    public function saveConsult($getUserLogged, $doctorUsername, $data){
+    public function saveConsult($getUserLogged, $doctorId, $data){
 
         /* Defined Data */
         $data = [
             'subject'     => $data->subject,
             'description' => $data->description,
-            'createdBy'   => $getUserLogged->username,
-            'consultTo'   => $doctorUsername,
+            'createdBy'   => $getUserLogged->id,
+            'consultTo'   => $doctorId,
         ];
 
         $insertData = $this->db->insert('consultations', $data);
@@ -32,15 +32,16 @@ class Consultation extends CI_Model{
         ];
     }
 
-    public function deleteConsult($id, $username){
+    public function deleteConsult($id, $getUserLogged){
         $consult = $this->db->get_where('Consultations', ['id' => $id])->row();
 
         if(!isset($consult->createdBy)) return [
             'success' => false,
             'message' => "Consultation Data Not Found. "
         ];
-
-        if($consult->createdBy != $username && $consult->consultTo != $username) return [
+        // var_dump($consult->consultTo . " = " . $getUserLogged->id );
+        // die();
+        if($consult->createdBy != $getUserLogged->id && $consult->consultTo != $getUserLogged->id) return [
             'success' => false,
             'message' => "Consultation Data Delete Failed. "
         ];

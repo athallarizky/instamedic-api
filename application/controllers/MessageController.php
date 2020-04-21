@@ -16,19 +16,19 @@ class MessageController extends CI_Controller{
         $this->load->model('User');
 
         // Cors
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
+		header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 
     }
 
     public function receiptName($getUserLogged, $consultData){
         // Stupid ways haha.. I don't know how to use ORM in codeigniter
-        return $getUserLogged->username == $consultData->createdBy ? $consultData->consultTo : $consultData->createdBy;
+        return $getUserLogged->id == $consultData->createdBy ? $consultData->consultTo : $consultData->createdBy;
     }
 
     public function isAllowed($getUserLogged, $consultData){
-        return ($getUserLogged->username != $consultData->createdBy) && ($getUserLogged->username != $consultData->consultTo) ? false : true;
+        return ($getUserLogged->id != $consultData->createdBy) && ($getUserLogged->id != $consultData->consultTo) ? false : true;
     }
 
     public function create($id){
@@ -52,7 +52,7 @@ class MessageController extends CI_Controller{
             'message' => "403 : Not Allowed."
         ]);
 
-        $saveMessage = $this->Message->saveMessage($getUserLogged, $consultData, $receptName);
+        $saveMessage = $this->Message->saveMessage($getUserLogged, $consultData, $receptName, $this->parseInput());
         return $this->response($saveMessage);
 
     }
@@ -110,6 +110,12 @@ class MessageController extends CI_Controller{
 			]);
 		}
     }
+
+    public function parseInput(){
+		// Because input data will be JSON we need to decode first.
+		// and use file_get_contents to get Method Type: Put, Delete.
+		return json_decode(file_get_contents('php://input'));
+	}
     
 }
 

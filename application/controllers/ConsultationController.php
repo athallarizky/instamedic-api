@@ -20,20 +20,38 @@ class ConsultationController extends CI_Controller{
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
     }
 
-    public function get($username){
-        
+    public function getAll($id){
+        // die($id);
         // Get who get the data
         $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
-        // die($getUserLogged);
-        if($getUserLogged->username != $username) return $this->response([
+        
+        if($getUserLogged->id != $id) return $this->response([
             'success' => false,
             'message' => '403 : Not Allowed.'
         ]);
 
-        return $this->response($this->Consultation->getConsultList($username));
+        return $this->response($this->Consultation->getConsultList($getUserLogged->id));
     }
 
-    public function create($doctorUsername){
+    public function isAllowed($getUserLogged, $consultData){
+        return ($getUserLogged->id != $consultData->createdBy) && ($getUserLogged->id != $consultData->consultTo) ? false : true;
+    }
+
+    public function get($id){
+        // Get who ask the data
+        $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
+
+        $consultData = $this->Consultation->getCounsult($id);
+
+        if(!$this->isAllowed($getUserLogged, $consultData)) return $this->response([
+            'success' => false,
+            'message' => '403 : Not Allowed.'
+        ]);
+
+        return $this->response($consultData);
+    }
+
+    public function create($doctorId){
 
         // Get who create the data
         $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
@@ -45,7 +63,7 @@ class ConsultationController extends CI_Controller{
             'message' => '403 : Not Allowed.'
         ]);
 
-        $saveConsult = $this->Consultation->saveConsult($getUserLogged, $doctorUsername, $this->parseInput());
+        $saveConsult = $this->Consultation->saveConsult($getUserLogged, $doctorId, $this->parseInput());
 		return $this->response($saveConsult);
     }
 
@@ -53,7 +71,7 @@ class ConsultationController extends CI_Controller{
         // Get who delete the data
         $getUserLogged = $this->User->getUserData('id', $this->decodeToken());
         
-        $deleteConsult = $this->Consultation->deleteConsult($id, $getUserLogged->username);
+        $deleteConsult = $this->Consultation->deleteConsult($id, $getUserLogged);
         return $this->response($deleteConsult);
     }
 

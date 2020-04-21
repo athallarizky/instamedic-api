@@ -2,12 +2,12 @@
 
 class Message extends CI_Model{
     
-    public function saveMessage($getUserLogged, $consultData, $receptName){
+    public function saveMessage($getUserLogged, $consultData, $receptName, $data){
 
         /* Defined Data */
         $data = [
-            'body'         => $this->input->post('body'),
-            'senderName'   => $getUserLogged->username,
+            'body'         => $data->body,
+            'senderName'   => $getUserLogged->id,
             'receptName'   => $receptName,
             'consult_id'     => $consultData->id,
         ];

@@ -16,8 +16,11 @@ $route['api/user/update/(:any)']['PUT']     = 'UserController/update/$1';
 $route['api/user/getAllDoctor']['OPTIONS']  = 'UserController/getAllDoctor';
 $route['api/user/getAllDoctor']['GET']      = 'UserController/getAllDoctor';
 
-$route['api/user/getDoctor/(:any)']['OPTIONS']  = 'UserController/getDoctor/$1';
-$route['api/user/getDoctor/(:any)']['GET']  = 'UserController/getDoctor/$1';
+$route['api/user/getDoctorById/(:any)']['OPTIONS']  = 'UserController/getDoctorById/$1';
+$route['api/user/getDoctorById/(:any)']['GET']      = 'UserController/getDoctorById/$1';
+
+$route['api/user/getDoctorByUsername/(:any)']['OPTIONS']  = 'UserController/getDoctorByUsername/$1';
+$route['api/user/getDoctorByUsername/(:any)']['GET']  = 'UserController/getDoctorByUsername/$1';
 
 $route['api/user/createDoctor']['OPTIONS']  = 'UserController/createDoctor';
 $route['api/user/createDoctor']['POST']     = 'UserController/createDoctor';
@@ -44,6 +47,9 @@ $route['api/medicine/search']['POST']            = 'MedicineController/search';
 $route['api/consultation/get/(:any)']['OPTIONS']       = 'ConsultationController/get/$1';
 $route['api/consultation/get/(:any)']['GET']       = 'ConsultationController/get/$1';
 
+$route['api/consultation/getAll/(:any)']['OPTIONS']       = 'ConsultationController/getAll/$1';
+$route['api/consultation/getAll/(:any)']['GET']       = 'ConsultationController/getAll/$1';
+
 $route['api/consultation/create/(:any)']['OPTIONS']   = 'ConsultationController/create/$1';
 $route['api/consultation/create/(:any)']['POST']   = 'ConsultationController/create/$1';
 
@@ -51,7 +57,10 @@ $route['api/consultation/delete/(:any)']['OPTIONS'] = 'ConsultationController/de
 $route['api/consultation/delete/(:any)']['DELETE'] = 'ConsultationController/delete/$1';
 
 // Consultation: messages Module Routes //
+$route['api/consultation/message/get/(:any)']['OPTIONS']      = 'MessageController/get/$1';
 $route['api/consultation/message/get/(:any)']['GET']      = 'MessageController/get/$1';
+
+$route['api/consultation/message/create/(:any)']['OPTIONS']  = 'MessageController/create/$1';
 $route['api/consultation/message/create/(:any)']['POST']  = 'MessageController/create/$1';
 
 
